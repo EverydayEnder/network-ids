@@ -1,0 +1,10 @@
+# Sample local.rules for Snort
+
+# Rule to detect a port scan on the network
+alert tcp $HOME_NET any -> $HOME_NET 22 (msg:"Port Scan Detected"; flags:S; threshold: type both, track by_src, count 5;)
+
+# Rule to detect a potential SQL injection attempt
+alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SQL Injection Attempt"; flow:to_server,established; content:"';"; nocase; classtype:web-application-attack;)
+
+# Rule to detect a potential cross-site scripting (XSS) attack
+alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"Cross-Site Scripting (XSS) Attempt"; flow:to_server,established; content:"<script>"; nocase; classtype:web-application-attack;)

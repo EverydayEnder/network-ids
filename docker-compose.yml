@@ -17,7 +17,7 @@ services:
       - ./snorby:/etc/snorby      # Volume mapping for Snorby data
 
   snorby:
-    image: jasonish/snorby
+    image: polinux/snorby
     container_name: snorby
     ports:
       - "8080:3000"

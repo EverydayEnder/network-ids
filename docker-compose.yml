@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  ids:
+    build: https://github.com/EverydayEnder/network-ids.git
+    container_name: network-ids
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+    restart: always
+    environment:
+      - HOME_NET=[your_network_range]
+      - SCAN_TYPE=fast
+      - SCHEDULED_SCAN_INTERVAL=3600
+    volumes:
+      - ./rules:/etc/snort/rules  # Volume mapping for Snort rules
+      - ./snorby:/etc/snorby      # Volume mapping for Snorby data
+
+  snorby:
+    image: jasonish/snorby
+    container_name: snorby
+    ports:
+      - "8080:3000"
+    environment:
+      - DATABASE_URL=sqlite3:///snorby_production.db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    volumes:
+      - ./snorby:/var/lib/mysql    # Volume mapping for Snorby database
+      - ./snorby/config:/etc/snorby/config # Volume mapping for Snorby configuration
+
+  redis:
+    image: redis:alpine
+    container_name: redis

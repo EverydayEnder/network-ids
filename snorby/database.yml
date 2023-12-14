@@ -1,0 +1,10 @@
+production:
+adapter: sqlite3
+database: /snorby_production.db
+host: localhost
+username: root
+password:
+port: 3306
+encoding: utf8
+pool: 5
+timeout: 5000
